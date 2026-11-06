@@ -1,0 +1,15 @@
+# Dados brutos (nunca versionar — baixar via script)
+data/
+*.csv
+*.parquet
+
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
