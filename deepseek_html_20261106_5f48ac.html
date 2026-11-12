@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto de Portfólio · Comportamento do Consumo Musical</title>
+<style>
+  :root {
+    --bg: #0f0f14;
+    --bg-card: #17171f;
+    --bg-card-hover: #1e1e28;
+    --border: #2a2a36;
+    --text: #e8e8ef;
+    --text-muted: #9a9aab;
+    --accent: #a78bfa;
+    --accent-2: #f472b6;
+    --accent-3: #38bdf8;
+    --green: #4ade80;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --gradient: linear-gradient(135deg, #a78bfa 0%, #f472b6 50%, #38bdf8 100%);
+    --radius: 14px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Fundo decorativo */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.35);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Sections */
+  section {
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  p { color: var(--text-muted); }
+  p strong { color: var(--text); }
+
+  /* Intro box */
+  .intro-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+
+  .intro-box p { margin: 0; }
+  .intro-box p + p { margin-top: 12px; }
+
+  /* Cards grid */
+  .grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+  }
+
+  .card:hover {
+    border-color: rgba(167,139,250,0.4);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 { margin-bottom: 6px; }
+  .card p { font-size: 0.94rem; }
+
+  /* Hypothesis cards */
+  .hypothesis {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 64px;
+  }
+
+  .hypothesis::before {
+    content: attr(data-id);
+    position: absolute;
+    left: 20px;
+    top: 22px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hypothesis p {
+    color: var(--text);
+    font-size: 0.96rem;
+    margin: 0;
+  }
+
+  .hypothesis .test {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .hypothesis .test strong { color: var(--accent-3); }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--bg-card);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(167,139,250,0.04); }
+
+  td strong { color: var(--text); }
+  td { color: var(--text-muted); }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 36px;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 9px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2), var(--accent-3));
+    border-radius: 2px;
+  }
+
+  .phase {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .phase:last-child { margin-bottom: 0; }
+
+  .phase::before {
+    content: "";
+    position: absolute;
+    left: -36px;
+    top: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+
+  .phase-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .phase-title h3 { margin: 0; }
+
+  .phase-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 100px;
+    background: rgba(56,189,248,0.12);
+    color: var(--accent-3);
+    border: 1px solid rgba(56,189,248,0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .phase ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+  }
+
+  .phase li {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .phase li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+
+  /* Stack chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 5px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+
+  .chip:hover { border-color: var(--accent); }
+
+  /* Deliverables */
+  .deliverable {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .deliverable:last-child { border-bottom: none; }
+
+  .deliverable-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(244,114,182,0.2));
+    border: 1px solid rgba(167,139,250,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  .deliverable-body h3 { margin-bottom: 4px; }
+  .deliverable-body p { font-size: 0.94rem; }
+
+  /* Pitfall cards */
+  .pitfall {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 12px;
+  }
+
+  .pitfall h3 {
+    font-size: 0.98rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pitfall h3::before {
+    content: "⚠";
+    color: var(--yellow);
+  }
+
+  .pitfall p { font-size: 0.92rem; margin-top: 6px; }
+
+  .pitfall .fix {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: var(--green);
+  }
+
+  .pitfall .fix::before {
+    content: "✓ Solução: ";
+    font-weight: 600;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  footer .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; color: #111; }
+    body::before { display: none; }
+    .card, .hypothesis, .intro-box, .pitfall, .table-wrap {
+      background: #fff;
+      border-color: #ddd;
+      box-shadow: none;
+    }
+    h1 { -webkit-text-fill-color: #6d28d9; color: #6d28d9; }
+    .container { padding: 20px; }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 40px 18px 60px; }
+    header { margin-bottom: 48px; }
+    section { margin-bottom: 48px; }
+    .hypothesis { padding-left: 52px; }
+    .hypothesis::before { left: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="badge">Projeto de Portfólio · Ciência de Dados</span>
+    <h1>Comportamento do Consumo Musical</h1>
+    <p class="subtitle">
+      Um projeto de ciência de dados que investiga como as pessoas consomem música, o que torna
+      uma faixa popular e como características sonoras podem alimentar um sistema de recomendação.
+    </p>
+  </header>
+
+  <!-- VISÃO GERAL -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">01</span>
+      <h2>Visão Geral</h2>
+    </div>
+    <div class="intro-box">
+      <p>
+        <strong>A pergunta central:</strong> o que faz uma música ser popular — e como o gosto musical
+        evolui ao longo do tempo, entre gêneros e entre diferentes perfis de ouvintes?
+      </p>
+      <p>
+        O projeto combina <strong>análise exploratória</strong>, <strong>séries temporais</strong>,
+        <strong>clustering</strong>, <strong>testes estatísticos</strong> e um
+        <strong>sistema de recomendação content-based</strong> para transformar dados culturais em
+        insights sobre comportamento do consumidor.
+      </p>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="card-icon">🎯</span>
+        <h3>Objetivo</h3>
+        <p>Investigar tendências de consumo musical e as características associadas à popularidade.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧪</span>
+        <h3>Diferencial</h3>
+        <p>Testar hipóteses estatísticas em vez de apenas descrever os dados.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🚀</span>
+        <h3>Entregável final</h3>
+        <p>Dashboard interativo + recomendador content-based + relatório de insights.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIPÓTESES -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">02</span>
+      <h2>Hipóteses Testáveis</h2>
+    </div>
+    <p style="margin-bottom: 20px;">
+      Transforme perguntas em hipóteses com critério de teste. O resultado (confirmar ou refutar)
+      é sempre um insight válido — e mostra rigor científico no portfólio.
+    </p>
+
+    <div class="hypothesis" data-id="H1">
+      <p>
+        Músicas com maior <strong>danceability</strong> e menor <strong>duração</strong> têm popularidade
+        média significativamente maior, controlando por gênero e ano de lançamento.
+      </p>
+      <span class="test"><strong>Teste:</strong> regressão múltipla + Mann-Whitney (popularidade não é normal).</span>
+    </div>
+
+    <div class="hypothesis" data-id="H2">
+      <p>
+        O consumo de gêneros com <strong>valence alta</strong> (músicas "alegres") aumenta nos meses
+        de verão no hemisfério sul.
+      </p>
+      <span class="test"><strong>Teste:</strong> decomposição STL + correlação com sazonalidade.</span>
+    </div>
+
+    <div class="hypothesis" data-id="H3">
+      <p>
+        Um recomendador <strong>content-based</strong> (similaridade sobre audio features) oferece
+        maior diversidade de gênero que um recomendador baseado apenas em popularidade, mantendo
+        relevância.
+      </p>
+      <span class="test"><strong>Teste:</strong> comparação de métricas (diversidade, novelty, hit rate).</span>
+    </div>
+
+    <div class="hypothesis" data-id="H4">
+      <p>
+        O clustering de artistas por audio features <strong>reproduz os gêneros declarados</strong>
+        nas plataformas, ou revela agrupamentos cross-genre?
+      </p>
+      <span class="test"><strong>Teste:</strong> Rand Index + matriz de confusão entre clusters e rótulos.</span>
+    </div>
+  </section>
+
+  <!-- FONTES DE DADOS -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">03</span>
+      <h2>Fontes de Dados</h2>
+    </div>
+    <p style="margin-bottom: 20px;">
+      <strong>Atenção:</strong> o Spotify descontinuou os endpoints de audio features para novos apps
+      em novembro de 2024. Use datasets consolidados e documente as fontes no README.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fonte</th>
+            <th>O que oferece</th>
+            <th>Uso no projeto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Spotify Tracks (Kaggle)</strong></td>
+            <td>~114k músicas com audio features, popularidade, gênero, duração</td>
+            <td>Base principal para clustering e recomendador</td>
+          </tr>
+          <tr>
+            <td><strong>Spotify 1.2M+ Songs (Kaggle)</strong></td>
+            <td>Volume maior com features acústicas</td>
+            <td>Análises em escala</td>
+          </tr>
+          <tr>
+            <td><strong>Billboard Hot 100 (Kaggle)</strong></td>
+            <td>Paradas históricas desde 1958</td>
+            <td>Séries temporais e evolução de gêneros</td>
+          </tr>
+          <tr>
+            <td><strong>Last.fm (API)</strong></td>
+            <td>Scrobbles e histórico de audição</td>
+            <td>Sazonalidade e padrões de consumo real</td>
+          </tr>
+          <tr>
+            <td><strong>MusicBrainz</strong></td>
+            <td>Metadados de artistas e gravadoras</td>
+            <td>Enriquecimento e rede de artistas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">04</span>
+      <h2>Roadmap do Projeto</h2>
+    </div>
+
+    <div class="timeline">
+
+      <div class="phase">
+        <div class="phase-title">
+          <h3>Fase 1 · Entendimento e Preparação</h3>
+          <span class="phase-tag">Base</span>
+        </div>
+        <ul>
+          <li>Coleta e integração das fontes de dados</li>
+          <li>Dicionário de dados documentado</li>
+          <li>Limpeza: nulos, duplicatas, outliers</li>
+          <li>EDA inicial: distribuições, correlações, visualizações</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">
+          <h3>Fase 2 · Análise de Tendências</h3>
+          <span class="phase-tag">Tempo</span>
+        </div>
+        <ul>
+          <li>Séries temporais: evolução de gêneros por década</li>
+          <li>Testes estatísticos de H1 e H2</li>
+          <li>Decomposição sazonal (STL) para H2</li>
+          <li>Visualizações de tendência com Plotly</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">
+          <h3>Fase 3 · Agrupamento e Similaridade</h3>
+          <span class="phase-tag">Cluster</span>
+        </div>
+        <ul>
+          <li>Normalização das audio features (RobustScaler)</li>
+          <li>K-Means com elbow/silhouette + DBSCAN para outliers</li>
+          <li>Redução de dimensionalidade (PCA ou UMAP) para visualização</li>
+          <li>Matriz de similaridade entre artistas</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">
+          <h3>Fase 4 · Sistema de Recomendação</h3>
+          <span class="phase-tag">Modelo</span>
+        </div>
+        <ul>
+          <li>Content-based: similaridade de cosseno sobre features normalizadas</li>
+          <li>Híbrido (opcional): combinar similaridade + popularidade</li>
+          <li>Avaliação: diversidade, novelty, hit rate</li>
+        </ul>
+      </div>
+
+      <div class="phase">
+        <div class="phase-title">
+          <h3>Fase 5 · Comunicação e Portfólio</h3>
+          <span class="phase-tag">Entrega</span>
+        </div>
+        <ul>
+          <li>Dashboard interativo em Streamlit</li>
+          <li>Relatório com insights e limitações</li>
+          <li>README narrativo no GitHub</li>
+          <li>Deploy no Streamlit Cloud ou Hugging Face Spaces</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">05</span>
+      <h2>Stack Técnica</h2>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Análise & Modelagem</h3>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">Pandas</span>
+          <span class="chip">NumPy</span>
+          <span class="chip">Scikit-learn</span>
+          <span class="chip">Statsmodels</span>
+          <span class="chip">SciPy</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Visualização</h3>
+        <div class="chips">
+          <span class="chip">Matplotlib</span>
+          <span class="chip">Seaborn</span>
+          <span class="chip">Plotly</span>
+          <span class="chip">Streamlit</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dados & Infra</h3>
+        <div class="chips">
+          <span class="chip">Kaggle API</span>
+          <span class="chip">requests</span>
+          <span class="chip">SQLite</span>
+          <span class="chip">Git</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Narrativa</h3>
+        <div class="chips">
+          <span class="chip">Jupyter</span>
+          <span class="chip">README (Markdown)</span>
+          <span class="chip">Loom / vídeo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTREGÁVEIS -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">06</span>
+      <h2>Entregáveis de Portfólio</h2>
+    </div>
+
+    <div class="card" style="padding: 8px 24px;">
+      <div class="deliverable">
+        <div class="deliverable-num">1</div>
+        <div class="deliverable-body">
+          <h3>Repositório GitHub estruturado</h3>
+          <p>Notebooks organizados por fase, requirements.txt, seeds fixas e script de download dos dados.</p>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">2</div>
+        <div class="deliverable-body">
+          <h3>README narrativo</h3>
+          <p>Problema → metodologia → hipóteses → principais insights → limitações. Recrutador lê o README antes do código.</p>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">3</div>
+        <div class="deliverable-body">
+          <h3>Dashboard interativo publicado</h3>
+          <p>Streamlit ou Plotly Dash hospedado online — o recrutador interage sem instalar nada.</p>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">4</div>
+        <div class="deliverable-body">
+          <h3>Seção de insights acionáveis</h3>
+          <p>Traduzir dados em decisão: "artistas independentes de pop devem priorizar faixas de 2:30–3:30 com danceability > 0,7".</p>
+        </div>
+      </div>
+      <div class="deliverable">
+        <div class="deliverable-num">5</div>
+        <div class="deliverable-body">
+          <h3>Artigo curto no Medium / LinkedIn</h3>
+          <p>Resumo em linguagem acessível do que foi descoberto, com 2–3 gráficos principais. Aumenta alcance e mostra comunicação.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARMADILHAS -->
+  <section>
+    <div class="section-label">
+      <span class="section-number">07</span>
+      <h2>Armadilhas a Evitar</h2>
+    </div>
+
+    <div class="pitfall">
+      <h3>Popularidade é métrica da plataforma</h3>
+      <p>O campo <code>popularity</code> do Spotify é um score interno (0–100) de streams recentes, não vendas nem relevância cultural.</p>
+      <span class="fix">documentar limitação e, se possível, cruzar com Billboard Hot 100 como segunda medida.</span>
+    </div>
+
+    <div class="pitfall">
+      <h3>Viés de sobrevivência</h3>
+      <p>Datasets só contêm músicas que "sobreviveram" — as que ninguém ouviu não aparecem.</p>
+      <span class="fix">reconhecer isso ao interpretar tendências históricas.</span>
+    </div>
+
+    <div class="pitfall">
+      <h3>Audio features são estimativas algorítmicas</h3>
+      <p>Danceability, energy etc. são modelos do Spotify, não rótulos humanos.</p>
+      <span class="fix">mencionar na metodologia e evitar conclusões causais.</span>
+    </div>
+
+    <div class="pitfall">
+      <h3>Confundimento por fama do artista</h3>
+      <p>Uma música popular pode ser popular por causa do artista, não das features.</p>
+      <span class="fix">controlar por popularidade do artista ou por gênero nos testes.</span>
+    </div>
+
+    <div class="pitfall">
+      <h3>Correlação ≠ causalidade</h3>
+      <p>Mesmo com H1 confirmada, "músicas curtas causam popularidade" é afirmação causal indevida.</p>
+      <span class="fix">usar linguagem de associação: "há associação estatística entre…".</span>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      <span class="gradient-text">Comportamento do Consumo Musical</span> · roadmap de projeto pessoal de ciência de dados
+    </p>
+    <p style="margin-top: 6px; font-size: 0.82rem;">
+      Salve este arquivo como <code>.html</code> e abra no navegador · imprima em PDF para anexar ao repositório
+    </p>
+  </footer>
+
+</div>
+</body>
+</html>
